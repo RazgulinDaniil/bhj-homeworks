@@ -1,12 +1,12 @@
 const timerElement = document.querySelector('#timer');
-let reverseTimer = new Date();
-function setTimer (date, hours, minutes , seconds) {
+function setTimer (hours, minutes , seconds) {
+    let date  = new Date();
     date.setHours(hours);
     date.setMinutes(minutes);
     date.setSeconds(seconds);
     return date;
 }
-reverseTimer = setTimer(reverseTimer, 0, 0, 59);
+let reverseTimer = setTimer(0, 0, 59);
 let hours = reverseTimer.getHours();
 let minutes = reverseTimer.getMinutes();
 let seconds = reverseTimer.getSeconds();
@@ -15,7 +15,18 @@ let idmin = 0;
 let idsec = 0;
 
 
-function timerfun () { 
+function timerfun () {
+    if(hours != "00" && minutes === "00" && seconds ==="00") {
+        hours--;
+        minutes = 59;
+        seconds = 59;
+        idhours = 0;
+    }
+    if(minutes != "00" && seconds === "00") {
+        minutes--;
+        seconds = 59;
+        idmin = 0;
+    }
     seconds--;
     if(hours < 10 && idhours < 1) {
         hours = "0" + hours;
@@ -29,13 +40,13 @@ function timerfun () {
         seconds = "0"+ seconds;
     }
     timerElement.textContent = hours +":"+ minutes +":"+ seconds;
-    if(seconds === "00") {
+    if(hours === "00" && minutes === "00" && seconds === "00") {
         clearInterval(timerFunc);
         alert("Вы победили в конкурсе!");
         // location = 'https://google.com';
     }
 }
 timerfun();
-let timerFunc = setInterval(timerfun, 1000);
+let timerFunc = setInterval(timerfun, 100);
 
 
