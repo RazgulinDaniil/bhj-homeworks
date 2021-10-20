@@ -14,7 +14,6 @@ let idhours = 0;
 let idmin = 0;
 let idsec = 0;
 
-
 function timerfun () {
     if(hours != "00" && minutes === "00" && seconds ==="00") {
         hours--;
@@ -47,6 +46,6 @@ function timerfun () {
     }
 }
 timerfun();
-let timerFunc = setInterval(timerfun, 100);
+let timerFunc = setInterval(timerfun, 1000);
 
 
