@@ -18,7 +18,7 @@ cookieElement.addEventListener("click", () => {
     if(counter % 2 == 0) {
         cookieElement.setAttribute('width', "200");
     }
-    if(counter > 2) {
+    if(counter > 1) {
         last = Date.now();
         clickPerSec = 1000/(last - start);
         timerClicker.textContent = "Скорость клика:" + clickPerSec.toFixed(2) + "кликов/за 1 сек";
