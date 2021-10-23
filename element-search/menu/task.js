@@ -13,6 +13,9 @@ for(let sub of menuSub) {
                     sub.classList.remove("menu_active");
                     return false;
                 }
+                for(let sub of menuSub) {
+                    sub.classList.remove("menu_active");
+                }
                 sub.classList.add("menu_active");
                 return false;
             };
