@@ -11,6 +11,7 @@ setTimeout(() => {
         });
 
     btnShowSuccess.addEventListener("click", () => {
+        modalElement.classList.remove("modal_active");
         modalSuccess.classList.add("modal_active");
 
     });
