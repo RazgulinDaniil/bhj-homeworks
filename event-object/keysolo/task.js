@@ -17,13 +17,12 @@ class Game {
   }
 
   registerEvents() {
-    /*
-      TODO:
-      Написать обработчик события, который откликается
-      на каждый введённый символ.
-      В случае правильного ввода слова вызываем this.success()
-      При неправильном вводе символа - this.fail();
-     */
+
+  const onKey = (e) => {
+    e.key.toLowerCase() === this.currentSymbol.textContent.toLowerCase() ? this.success() 
+    : this.fail();
+  };
+  document.addEventListener('keyup', onKey);
   }
 
   success() {
@@ -50,7 +49,10 @@ class Game {
 
   setNewWord() {
     const word = this.getWord();
-
+    const timer = document.createElement('div');
+    let seconds = word.length;
+    timer.textContent = `Время осталось : ${seconds}`;
+    this.wordElement.before(timer);
     this.renderWord(word);
   }
 
