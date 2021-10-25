@@ -49,10 +49,10 @@ class Game {
 
   setNewWord() {
     const word = this.getWord();
-    const timer = document.createElement('div');
-    let seconds = word.length;
-    timer.textContent = `Время осталось : ${seconds}`;
-    this.wordElement.before(timer);
+    // const timer = document.createElement('div');
+    // let seconds = word.length;
+    // timer.textContent = `Время осталось : ${seconds}`;
+    // this.wordElement.before(timer);
     this.renderWord(word);
   }
 
