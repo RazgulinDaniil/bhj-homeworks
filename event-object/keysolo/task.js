@@ -1,92 +1,101 @@
 class Game {
   constructor(container) {
     this.container = container;
-    this.wordElement = container.querySelector('.word');
-    this.winsElement = container.querySelector('.status__wins');
-    this.lossElement = container.querySelector('.status__loss');
+    this.wordElement = document.querySelector('.word');
+    this.winsElement = document.querySelector('.status__wins');
+    this.lossElement = document.querySelector('.status__loss');
+    this.timer = document.querySelector('.timer');
+    this.timerID = null;
 
     this.reset();
-
-    this.registerEvents();
+    this.eventRegistration();
   }
 
   reset() {
-    this.setNewWord();
     this.winsElement.textContent = 0;
     this.lossElement.textContent = 0;
+    clearInterval(this.timerID);
+    this.setNewWord();
   }
-
-  registerEvents() {
-
-  const onKey = (e) => {
-    e.key.toLowerCase() === this.currentSymbol.textContent.toLowerCase() ? this.success() 
-    : this.fail();
-  };
-  document.addEventListener('keyup', onKey);
+  
+  eventRegistration() {
+    const onKey = (e) => {
+      if(e.key === "Shift" || e.key === "Alt") {
+        return;
+      }
+      e.key.toLowerCase() === this.currentSymbol.textContent.toLowerCase()? this.success() : this.fail();
+    };
+    document.addEventListener('keyup', onKey);
   }
 
   success() {
     this.currentSymbol.classList.add('symbol_correct');
     this.currentSymbol = this.currentSymbol.nextElementSibling;
-    if (this.currentSymbol !== null) {
+    if(this.currentSymbol !== null) {
       return;
     }
-
-    if (++this.winsElement.textContent === 10) {
-      alert('Победа!');
+    if(++this.winsElement.textContent === 10) {
+      alert("Победа!");
       this.reset();
     }
+    clearInterval(this.timerID);
     this.setNewWord();
   }
 
   fail() {
-    if (++this.lossElement.textContent === 5) {
-      alert('Вы проиграли!');
+    if(++this.lossElement.textContent === 5) {
+      alert('Проигрыш!');
       this.reset();
     }
+    clearInterval(this.timerID);
     this.setNewWord();
+  }
+
+  setTimer(word) {
+    let i = word.length;
+    this.timer.textContent = i;
+    this.timerID = setInterval(()=> {
+      this.timer.textContent--;
+      if(this.timer.textContent < 1) {
+        this.fail();
+      }
+    }, 1000);
   }
 
   setNewWord() {
     const word = this.getWord();
-    // const timer = document.createElement('div');
-    // let seconds = word.length;
-    // timer.textContent = `Время осталось : ${seconds}`;
-    // this.wordElement.before(timer);
-    this.renderWord(word);
+    this.setTimer(word);
+    this.parseWord(word);
   }
 
   getWord() {
     const words = [
-        'bob',
-        'awesome',
-        'netology',
-        'hello',
-        'kitty',
-        'rock',
-        'youtube',
-        'popcorn',
-        'cinema',
-        'love',
-        'javascript'
-      ],
-      index = Math.floor(Math.random() * words.length);
-
+      'bob',
+      'awesome',
+      'netology',
+      'hello',
+      'kitty',
+      'rock',
+      'я youtube',
+      'popcorn',
+      'пицца',
+      'я love',
+      'я javascript',
+      'петя'
+    ],
+    index = Math.floor(Math.random() * words.length);
     return words[index];
   }
 
-  renderWord(word) {
+  parseWord(word) {
     const html = [...word]
-      .map(
-        (s, i) =>
+    .map(
+    (s, i) =>
           `<span class="symbol ${i === 0 ? 'symbol_current': ''}">${s}</span>`
       )
-      .join('');
+    .join('');
     this.wordElement.innerHTML = html;
-
     this.currentSymbol = this.wordElement.querySelector('.symbol_current');
   }
 }
-
 new Game(document.getElementById('game'))
-
