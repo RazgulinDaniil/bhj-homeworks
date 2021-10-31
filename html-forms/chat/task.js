@@ -4,7 +4,7 @@ class chatWidget {
         this.chatBox = document.getElementById('chat-widget__messages');
         this.sideButtom = document.querySelector('.chat-widget__side');
         this.chatInput = document.getElementById('chat-widget__input');
-        
+
         this.sentMes();
         this.getTime();
         this.activateChat();
@@ -31,7 +31,7 @@ class chatWidget {
         }, 30000);
     }
 
-    sentMes() {
+    sentMessage() {
         this.chatInput.addEventListener('keydown',(e)=> {
             if(e.keyCode === 13 && this.chatInput.value !== '') {
                 this.userMessages.push(this.chatInput.value);
@@ -73,11 +73,12 @@ class chatWidget {
         const messages = [
             'Привет!',
             'Пока!',
-            'Не пешите мне больше',
-            'Что еще?'
+            'Не пишите мне больше!',
+            'Что еще?',
+            'Вы тут?',
+            'Вопросы?'
         ],
         index = Math.floor(Math.random() * messages.length);
-        
         return messages[index];
     }
 }
