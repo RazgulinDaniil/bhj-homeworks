@@ -5,7 +5,7 @@ class chatWidget {
         this.sideButtom = document.querySelector('.chat-widget__side');
         this.chatInput = document.getElementById('chat-widget__input');
 
-        this.sentMes();
+        this.sentMessage();
         this.getTime();
         this.activateChat();
         this.userMessages = [];
