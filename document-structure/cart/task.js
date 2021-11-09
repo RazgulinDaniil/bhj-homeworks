@@ -40,7 +40,10 @@ class Basket {
                 const cartValue = this.findInCart(product);
                 if(cartValue !== undefined) {
                     const total = Number(cartValue.querySelector('.cart__product-count').textContent) + Number(this.productValue[idx].textContent);
-                    return cartValue.querySelector('.cart__product-count').textContent = total;
+                    cartValue.querySelector('.cart__product-count').textContent = total;
+                    this.arrProducts = [...this.cartContainer.children].map(child => child.outerHTML);
+                    this.addtoLocalStorage(this.arrProducts);
+                    return;
                 }
             this.arrProducts.push(`<div class="cart__product" data-id="${product.dataset.id}">
             <img class="cart__product-image" src="${product.querySelector('img').getAttribute('src')}"><div class="cart__product-count">${this.productValue[idx].textContent}</div><div class="cart__product-del">x</div></div> `);
@@ -63,6 +66,9 @@ class Basket {
         if (this.arrProducts.length > 0) {
             this.cart.setAttribute('style', 'display : block');
             this.cartContainer.innerHTML = Array.from(this.getLocalStorage('products')).join('');
+            // this.arrProducts = this.cartContainer.innerHTML.split('<div class="cart__product');
+            // this.arrProducts = [...this.cartContainer.children].map(child => child.outerHTML);
+            // this.addtoLocalStorage(this.arrProducts);
             this.eventDelete();
         }
         if(this.arrProducts.length < 1) {
@@ -73,7 +79,6 @@ class Basket {
     eventDelete () {
         Array.from(this.cartContainer.children).forEach((element,idx)=> {
             element.querySelector('.cart__product-del').addEventListener('click', () => {
-                element.remove();
                 this.arrProducts.splice(idx,1);
                 this.addtoLocalStorage(this.arrProducts);
                 this.showCart();
