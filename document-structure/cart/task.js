@@ -18,8 +18,8 @@ class Basket {
     eventDecInc() {
         this.products.forEach((product,idx) => {
             product.querySelector('.product__quantity-control_dec').addEventListener('click', ()=> {
-                this.productValue[idx].textContent > 0 ? this.productValue[idx].textContent--
-                :   this.productValue[idx].textContent = 0
+                this.productValue[idx].textContent > 1 ? this.productValue[idx].textContent--
+                :   this.productValue[idx].textContent = 1
             });
             product.querySelector('.product__quantity-control_inc').addEventListener('click', () => {
                 this.productValue[idx].textContent++;
@@ -41,19 +41,23 @@ class Basket {
                 if(cartValue !== undefined) {
                     const total = Number(cartValue.querySelector('.cart__product-count').textContent) + Number(this.productValue[idx].textContent);
                     cartValue.querySelector('.cart__product-count').textContent = total;
-                    this.arrProducts = [...this.cartContainer.children].map(child => child.outerHTML);
+                    this.arrProducts[idx].text = total;
                     this.addtoLocalStorage(this.arrProducts);
                     return;
                 }
-            this.arrProducts.push(`<div class="cart__product" data-id="${product.dataset.id}">
-            <img class="cart__product-image" src="${product.querySelector('img').getAttribute('src')}"><div class="cart__product-count">${this.productValue[idx].textContent}</div><div class="cart__product-del">x</div></div> `);
+            this.arrProducts.push({id:product.dataset.id, src: product.querySelector('img').getAttribute('src'), text:this.productValue[idx].textContent});
             this.addtoLocalStorage(this.arrProducts);
             this.showCart();
 
             });
         });
     }
-
+    covertToHtml(element) {
+        return `<div class="cart__product" data-id="${element.id}">
+        <img class="cart__product-image" src="${element.src}">
+        <div class="cart__product-count">${element.text}</div>
+        <div class="cart__product-del">x</div></div>`;
+    }
     addtoLocalStorage(obj) {
         localStorage.setItem('products', JSON.stringify(obj));
     }
@@ -65,10 +69,8 @@ class Basket {
     showCart() {
         if (this.arrProducts.length > 0) {
             this.cart.setAttribute('style', 'display : block');
-            this.cartContainer.innerHTML = Array.from(this.getLocalStorage('products')).join('');
-            // this.arrProducts = this.cartContainer.innerHTML.split('<div class="cart__product');
-            // this.arrProducts = [...this.cartContainer.children].map(child => child.outerHTML);
-            // this.addtoLocalStorage(this.arrProducts);
+            let arr = this.getLocalStorage('products');
+            this.cartContainer.innerHTML = arr.map(e => this.covertToHtml(e)).join('');
             this.eventDelete();
         }
         if(this.arrProducts.length < 1) {
@@ -79,6 +81,7 @@ class Basket {
     eventDelete () {
         Array.from(this.cartContainer.children).forEach((element,idx)=> {
             element.querySelector('.cart__product-del').addEventListener('click', () => {
+                element.remove();
                 this.arrProducts.splice(idx,1);
                 this.addtoLocalStorage(this.arrProducts);
                 this.showCart();
