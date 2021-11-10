@@ -1,20 +1,22 @@
-'use strict';
-const toolTipsList = document.querySelectorAll('.has-tooltip');
-toolTipsList.forEach(element => {  
-    // const pos = element.dataset.position;
-    element.insertAdjacentHTML('beforeend',`<div class="tooltip" style="">${element.getAttribute('title')}</div>`);
-    element.setAttribute('style','position: relative; display: inline-block');
-    element.addEventListener('click', (event)=> {
-        event.preventDefault();
-        const tips = findtips();   
-        if(tips.some(element => element.classList.contains('tooltip_active'))) {
-            tips.forEach(element => element.classList.remove('tooltip_active'));
+const listToolTips = document.querySelectorAll('.has-tooltip');
+const tip = document.createElement('div');
+tip.setAttribute('class', 'tooltip');
+tip.setAttribute('style', 'top: 0; left: 0');
+let prevElement = null;
+
+listToolTips.forEach(item => { 
+    item.addEventListener('click', (e)=> {
+        e.preventDefault();  
+        if(prevElement === item) {
+            tip.classList.remove('tooltip_active');
             return;
         }
-        const tip = element.querySelector('.tooltip');
+        let pos = item.getBoundingClientRect();
+        item.appendChild(tip);
+        tip.innerText = item.getAttribute('title');
+        tip.style.left = `${pos.left}px`;
+        tip.style.top = (pos.top + 20) + 'px';
         tip.classList.add('tooltip_active');
+        prevElement = e.target;
     });
 });
-function findtips () {
-    return Array.from(document.querySelectorAll('.tooltip'));
-}
