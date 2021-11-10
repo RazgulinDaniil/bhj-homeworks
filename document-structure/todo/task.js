@@ -1,20 +1,33 @@
 'use strict';
-class toDo {
+class ToDo {
     constructor(container) {
         this.container = container;
         this.input = document.querySelector('.tasks__input');
         this.list = document.querySelector('.tasks__list');
         this.addButton = document.querySelector('.tasks__add');
+        this.form = document.querySelector('.tasks__control');
 
         this.tasklist = [];
-        this.start();
+        this.formPreventDef();
         this.showList();
         this.eventAddtask();
     }
-
+    formPreventDef() {
+        this.form.addEventListener('submit', (e)=> {
+            e.preventDefault();
+        });
+    }
+    convertToHtml(element) {
+        return `<div class="task"><div class="task__title">${element.value}</div>
+        <a href="#" class="task__remove">&times;</a></div>`;
+    }
     showList() {
-        this.list.innerHTML = Array.from(this.getLocalStorage('tasks')).join('');
-        this.eventRemove();
+        if(this.getLocalStorage('tasks') != null) {
+            let arr = this.getLocalStorage('tasks');
+            this.tasklist = this.getLocalStorage('tasks');
+            this.list.innerHTML = arr.map(e => this.convertToHtml(e)).join('');
+            this.eventRemove();
+        }
 
     }
     addToLocalStorage(obj) {
@@ -29,8 +42,8 @@ class toDo {
         const addkey = (e) => {
             if(e.key === 'Enter' || e.type === 'click') {
                 e.preventDefault();
-                if(this.input.value !== '') {
-                    this.tasklist.push(`<div class="task"><div class="task__title">${this.input.value}</div><a href="#" class="task__remove">&times;</a>`);
+                if(this.input.value.trim() !== '') {
+                    this.tasklist.push({value:this.input.value});
                     this.addToLocalStorage(this.tasklist);
                     this.showList();
                     this.input.value = '';
@@ -52,11 +65,6 @@ class toDo {
             });
         });
     }
-
-    start () {
-        if(this.getLocalStorage('tasks') != null) {
-            this.tasklist = this.getLocalStorage('tasks');
-        }
-    }
 }
-new toDo(document.querySelector('.card'));
+
+new ToDo(document.querySelector('.card'));
